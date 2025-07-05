@@ -14,9 +14,12 @@ moduleBaseX = 86;
 moduleBaseY = 48;
 moduleBaseZ = 2.4;
 moduleBaseCornerDia = 3.5;
-moduleDupontConnCtrZ = 15.3;
-moduleDupontConn1CtrX = 17.2;
-moduleDupontConn2Ctrx = 32.4;
+moduleUartDupontConnCtrZ = 15.3;
+moduleUartDupontConn1CtrX = 17.2;
+moduleUartDupontConn2Ctrx = 32.4;
+moduleUartDupontConnectorsCtr = (moduleUartDupontConn1CtrX + moduleUartDupontConn2Ctrx)/2;
+
+echo(str("moduleUartDupontConnectorsCtr = ", moduleUartDupontConnectorsCtr));
 
 mountingHoleCtrsX = 72.2 + 3.6;
 mountingHoleCtrsY = 36.6 - 10;
