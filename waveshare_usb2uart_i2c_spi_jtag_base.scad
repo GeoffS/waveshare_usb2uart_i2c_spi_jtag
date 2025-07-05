@@ -32,7 +32,7 @@ mountingBoltLength = 8;
 
 // mountingBoltHeadToNutLength = mountingBoltLength - mouuntingNutRecessZ;
 
-baseConnectorSideY = 25;
+baseConnectorSideY = 35;
 baseUsbSideY = 10;
 
 baseX = moduleBaseX + 2*4;
@@ -48,7 +48,7 @@ mountingHolesOffsetY = moduleBaseY/2 - baseY/2 + baseConnectorSideY;
 // 0.5mm extra in case the bolt is a little long
 mountingNutRecessTotalZ = mouuntingNutRecessZ + 0.5;
 
-uartStrainReliefDia = 10;
+uartStrainReliefDia = 15;
 uartStrainReliefZ = baseZ + moduleUartDupontConnCtrZ;
 uartStrainReliefCZ = 2;
 
@@ -65,20 +65,29 @@ module itemModule()
                         simpleChamferedCylinder(d=baseCornerDia, h=baseZ, cz=baseCZ);
 
             // UART cable strain relief:
-            translate([-baseX/2+moduleUartDupontConnectorsCtrX,0,0])
+            translate([-baseX/2 + moduleUartDupontConnectorsCtrX, -baseY/2 + uartStrainReliefDia/2 + baseCZ, 0])
             {
-                hull() uartStrainReliefXform() simpleChamferedCylinder(d=uartStrainReliefDia, h=uartStrainReliefZ, cz=uartStrainReliefCZ);
+                difference() 
+                {
+                    hull() uartStrainReliefXform() simpleChamferedCylinder(d=uartStrainReliefDia, h=uartStrainReliefZ, cz=uartStrainReliefCZ);
+
+                    translate([0,0,uartStrainReliefZ]) rotate([-90,0,0]) 
+                    {
+                        tcy([0,0,-20], d=uartCableDia, h=40);
+                        doubleZ() translate([0,0,uartStrainReliefDia/2-uartCableDia/2-uartStrainReliefCZ]) cylinder(d2=10, d1=0, h=5);
+                    }
+                }
             }
         }
         
         // Mounting holes:
         mountingHolesXform()
-            {
-                // Hole:
-                tcy([0,0,-1], d=mountingHoleDia, h=20);
-                // Nut recess:
-                rotate([0,0,30]) tcy([0,0,-10+mountingNutRecessTotalZ], d=mountingNutRecessDia, h=10, $fn=6);
-            }
+        {
+            // Hole:
+            tcy([0,0,-1], d=mountingHoleDia, h=20);
+            // Nut recess:
+            rotate([0,0,30]) tcy([0,0,-10+mountingNutRecessTotalZ], d=mountingNutRecessDia, h=10, $fn=6);
+        }
     }
     // Sacrificial layer:
     mountingHolesXform() tcy([0,0,mountingNutRecessTotalZ], d=8, h=layerThickness);
@@ -87,7 +96,7 @@ module itemModule()
 module uartStrainReliefXform()
 {
     doubleX() 
-        translate([(uartStrainReliefDia + uartCableDia)/2, -baseY/2 + uartStrainReliefDia/2 + baseCZ, 0]) 
+        translate([(uartStrainReliefDia + uartCableDia)/2, 0, 0]) 
             children();
 }
 
