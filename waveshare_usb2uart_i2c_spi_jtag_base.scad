@@ -17,7 +17,7 @@ moduleDupontConnCtrZ = 15.3;
 moduleDupontConn1CtrX = 17.2;
 moduleDupontConn2Ctrx = 32.4;
 
-mountingHoleCtrsX = 72.2 + 3.6/2;
+mountingHoleCtrsX = 72.2 + 3.6;
 mountingHoleCtrsY = 36.6 - 10;
 mountingHoleDia = m3ClearanceDia;
 mountingNutRecessDia = m3HexNutDia;
