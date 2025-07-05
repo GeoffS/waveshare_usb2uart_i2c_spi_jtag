@@ -1,4 +1,5 @@
 include <../OpenSCAD_Lib/MakeInclude.scad>
+include <../OpenSCAD_Lib/chamferedCylinders.scad>
 
 layerThickness = 0.2;
 
@@ -32,7 +33,8 @@ baseUsbSideY = 10;
 baseX = moduleBaseX + 2*4;
 baseY = moduleBaseY + baseConnectorSideY + baseUsbSideY;
 baseZ = mountingBoltLength - moduleBaseZ + 0.7; // mountingBoltLength - mountingNutRecessTotalZ - moduleBaseZ;
-baseCornerDia = 8;
+baseCornerDia = 20;
+baseCZ = 2;
 
 echo(str("baseZ = ", baseZ));
 
@@ -48,8 +50,8 @@ module itemModule()
         // Base:
         hull() 
             doubleX() doubleY() 
-                translate([baseX/2-baseCornerDia/2, baseY/2-baseCornerDia/2, 0]) 
-                    cylinder(d=baseCornerDia, h=baseZ);
+                translate([baseX/2-baseCornerDia/2, baseY/2-baseCornerDia/2, 0])
+                    simpleChamferedCylinder(d=baseCornerDia, h=baseZ, cz=baseCZ);
         
         // Mounting holes:
         mountingHolesXform()
