@@ -1,5 +1,7 @@
 include <../OpenSCAD_Lib/MakeInclude.scad>
 
+layerThickness = 0.2;
+
 m3ClearanceDia = 3.4;
 m3HeadClearanceDia = 6;
 m3SocketHeadZ = 3;
@@ -34,6 +36,9 @@ echo(str("baseZ = ", baseZ));
 
 mountingHolesOffsetY = moduleBaseY/2 - baseY/2 + baseConnectorSideY;
 
+// 0.2mm extra in case the bolt is a little long
+mountingNutRecessTotalZ = mouuntingNutRecessZ + 0.2;
+
 module itemModule()
 {
 	difference()
@@ -45,22 +50,29 @@ module itemModule()
                     cylinder(d=baseCornerDia, h=baseZ);
         
         // Mounting holes:
-        translate([0, mountingHolesOffsetY, 0]) doubleX() doubleY() 
-            translate([mountingHoleCtrsX/2, mountingHoleCtrsY/2, 0])
+        mountingHolesXform()
             {
                 // Hole:
                 tcy([0,0,-1], d=mountingHoleDia, h=20);
                 // Nut recess:
-                // (0.2mm extra in case the bolt is a little long)
-                tcy([0,0,-10+mouuntingNutRecessZ+0.2], d=mountingNutRecessDia, h=10, $fn=6);
+                tcy([0,0,-10+mountingNutRecessTotalZ], d=mountingNutRecessDia, h=10, $fn=6);
             }
     }
+    // Sacrificial layer:
+    mountingHolesXform() tcy([0,0,mountingNutRecessTotalZ], d=8, h=layerThickness);
+}
+
+module mountingHolesXform()
+{
+    translate([0, mountingHolesOffsetY, 0]) doubleX() doubleY() 
+        translate([mountingHoleCtrsX/2, mountingHoleCtrsY/2, 0])
+            children();
 }
 
 module clip(d=0)
 {
 	//tc([-200, -400-d, -10], 400);
-    // tcu([mountingHoleCtrsX/2+d, -200, -200], 400);
+    tcu([mountingHoleCtrsX/2+d, -200, -200], 400);
 }
 
 if(developmentRender)
