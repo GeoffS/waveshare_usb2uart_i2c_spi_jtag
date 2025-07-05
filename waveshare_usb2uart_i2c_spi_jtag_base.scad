@@ -3,8 +3,9 @@ include <../OpenSCAD_Lib/MakeInclude.scad>
 m3ClearanceDia = 3.4;
 m3HeadClearanceDia = 6;
 m3SocketHeadZ = 3;
-m3NutDia = 7.9; // Square, $fn=4
-m3NutZ = 2.4;
+m3SquareNutDia = 7.9; // $fn=4
+m3HexNutDia = 6.3; // $fn=6
+m3NutZ = 2.4; // both square and hex
 
 moduleBaseX = 86;
 moduleBaseY = 48;
@@ -14,17 +15,22 @@ moduleDupontConnCtrZ = 15.3;
 moduleDupontConn1CtrX = 17.2;
 moduleDupontConn2Ctrx = 32.4;
 
+mountingHoleCtrsX = 72.2 + 3.6/2;
+mountingHoleCtrsY = 36.6 - 10;
+mountingHoleDia = m3ClearanceDia;
+mountingNutRecessDia = m3HexNutDia;
+mouuntingNutRecessZ = m3NutZ + 0.3; // 0.3 of the screw past the bolt.
+mountingBoltLength = 10;
+
 baseConnectorSideY = 25;
 baseUsbSideY = 10;
 
 baseX = moduleBaseX + 2*4;
 baseY = moduleBaseY + baseConnectorSideY + baseUsbSideY;
-baseZ = 3;
+baseZ = mountingBoltLength - mouuntingNutRecessZ - moduleBaseZ;
 baseCornerDia = 8;
 
-mountingHoleCtrsX = 72.2 + 3.6/2;
-mountingHoleCtrsY = 36.6 - 10;
-mountingHoleDia = 3.3;
+echo(str("baseZ = ", baseZ));
 
 mountingHolesOffsetY = moduleBaseY/2 - baseY/2 + baseConnectorSideY;
 
@@ -40,14 +46,21 @@ module itemModule()
         
         // Mounting holes:
         translate([0, mountingHolesOffsetY, 0]) doubleX() doubleY() 
-            translate([mountingHoleCtrsX/2, mountingHoleCtrsY/2, -1]) 
-                cylinder(d=mountingHoleDia, h=20);
+            translate([mountingHoleCtrsX/2, mountingHoleCtrsY/2, 0])
+            {
+                // Hole:
+                tcy([0,0,-1], d=mountingHoleDia, h=20);
+                // Nut recess:
+                // (0.2mm extra in case the bolt is a little long)
+                tcy([0,0,-10+mouuntingNutRecessZ+0.2], d=mountingNutRecessDia, h=10, $fn=6);
+            }
     }
 }
 
 module clip(d=0)
 {
 	//tc([-200, -400-d, -10], 400);
+    // tcu([mountingHoleCtrsX/2+d, -200, -200], 400);
 }
 
 if(developmentRender)
