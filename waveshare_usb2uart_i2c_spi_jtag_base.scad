@@ -17,9 +17,11 @@ moduleBaseCornerDia = 3.5;
 moduleUartDupontConnCtrZ = 15.3;
 moduleUartDupontConn1CtrX = 17.2;
 moduleUartDupontConn2Ctrx = 32.4;
-moduleUartDupontConnectorsCtr = (moduleUartDupontConn1CtrX + moduleUartDupontConn2Ctrx)/2;
+moduleUartDupontConnectorsCtrX = (moduleUartDupontConn1CtrX + moduleUartDupontConn2Ctrx)/2;
 
-echo(str("moduleUartDupontConnectorsCtr = ", moduleUartDupontConnectorsCtr));
+uartCableDia = 5;
+
+echo(str("moduleUartDupontConnectorsCtrX = ", moduleUartDupontConnectorsCtrX));
 
 mountingHoleCtrsX = 72.2 + 3.6;
 mountingHoleCtrsY = 36.6 - 10;
@@ -46,15 +48,28 @@ mountingHolesOffsetY = moduleBaseY/2 - baseY/2 + baseConnectorSideY;
 // 0.5mm extra in case the bolt is a little long
 mountingNutRecessTotalZ = mouuntingNutRecessZ + 0.5;
 
+uartStrainReliefDia = 10;
+uartStrainReliefZ = baseZ + moduleUartDupontConnCtrZ;
+uartStrainReliefCZ = 2;
+
 module itemModule()
 {
 	difference()
     {
-        // Base:
-        hull() 
-            doubleX() doubleY() 
-                translate([baseX/2-baseCornerDia/2, baseY/2-baseCornerDia/2, 0])
-                    simpleChamferedCylinder(d=baseCornerDia, h=baseZ, cz=baseCZ);
+        union()
+        {
+            // Base:
+            hull() 
+                doubleX() doubleY() 
+                    translate([baseX/2-baseCornerDia/2, baseY/2-baseCornerDia/2, 0])
+                        simpleChamferedCylinder(d=baseCornerDia, h=baseZ, cz=baseCZ);
+
+            // UART cable strain relief:
+            translate([-baseX/2+moduleUartDupontConnectorsCtrX,0,0])
+            {
+                hull() uartStrainReliefXform() simpleChamferedCylinder(d=uartStrainReliefDia, h=uartStrainReliefZ, cz=uartStrainReliefCZ);
+            }
+        }
         
         // Mounting holes:
         mountingHolesXform()
@@ -69,6 +84,13 @@ module itemModule()
     mountingHolesXform() tcy([0,0,mountingNutRecessTotalZ], d=8, h=layerThickness);
 }
 
+module uartStrainReliefXform()
+{
+    doubleX() 
+        translate([(uartStrainReliefDia + uartCableDia)/2, -baseY/2 + uartStrainReliefDia/2 + baseCZ, 0]) 
+            children();
+}
+
 module mountingHolesXform()
 {
     translate([0, mountingHolesOffsetY, 0]) doubleX() doubleY() 
@@ -79,7 +101,7 @@ module mountingHolesXform()
 module clip(d=0)
 {
 	//tc([-200, -400-d, -10], 400);
-    tcu([mountingHoleCtrsX/2+d, -200, -200], 400);
+    // tcu([mountingHoleCtrsX/2+d, -200, -200], 400);
 }
 
 if(developmentRender)
