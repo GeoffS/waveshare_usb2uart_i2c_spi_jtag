@@ -20,12 +20,13 @@ mountingHoleCtrsX = 72.2 + 3.6/2;
 mountingHoleCtrsY = 36.6 - 10;
 mountingHoleDia = 3.3;
 
-mountingHolesOffsetY = -moduleBaseY/2 + baseConnectorSideY; //mountingHoleCtrsY/2 - baseY/2 + baseConnectorSideY;
+mountingHolesOffsetY = moduleBaseY/2 - baseY/2 + baseConnectorSideY;
 
 module itemModule()
 {
 	difference()
     {
+        // Base:
         hull() 
             doubleX() doubleY() 
                 translate([baseX/2-baseCornerDia/2, baseY/2-baseCornerDia/2, 0]) 
