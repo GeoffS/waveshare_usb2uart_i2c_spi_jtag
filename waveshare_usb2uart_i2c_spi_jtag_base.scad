@@ -1,5 +1,6 @@
 include <../OpenSCAD_Lib/MakeInclude.scad>
 include <../OpenSCAD_Lib/chamferedCylinders.scad>
+include <../OpenSCAD_Lib/torus.scad>
 
 layerThickness = 0.2;
 
@@ -55,6 +56,9 @@ uartStrainReliefDia = 15;
 uartStrainReliefZ = baseZ + moduleUartDupontConnCtrZ;
 uartStrainReliefCZ = 2;
 
+uartStrainReliefCtrX = -moduleBodyY/2 + moduleUartDupontConnectorsCtrX;
+uartStrainReliefCtrY = -baseY/2 + uartStrainReliefDia/2 + baseCZ;
+
 module itemModule()
 {
 	difference()
@@ -68,18 +72,32 @@ module itemModule()
                         simpleChamferedCylinder(d=baseCornerDia, h=baseZ, cz=baseCZ);
 
             // UART cable strain relief:
-            translate([-moduleBodyY/2 + moduleUartDupontConnectorsCtrX, -baseY/2 + uartStrainReliefDia/2 + baseCZ, 0])
+            translate([uartStrainReliefCtrX, uartStrainReliefCtrY, 0])
             {
                 difference() 
                 {
+                    ctrsX = uartCableDia/2 + uartStrainReliefCZ + 2;
+                    // Body:
                     hull() doubleX() 
-                        translate([uartCableDia/2 + uartStrainReliefCZ, 0, 0]) 
+                        translate([ctrsX, 0, 0]) 
                             simpleChamferedCylinder(d=uartStrainReliefDia, h=uartStrainReliefZ, cz=uartStrainReliefCZ);
 
+                    // Cable cutout:
                     translate([0,0,uartStrainReliefZ]) rotate([-90,0,0]) 
                     {
                         tcy([0,0,-20], d=uartCableDia, h=40);
                         doubleZ() translate([0,0,uartStrainReliefDia/2-uartCableDia/2-uartStrainReliefCZ]) cylinder(d2=10, d1=0, h=5);
+                    }
+
+                    // Zip-Tie:
+                    translate([0,0,uartStrainReliefZ])
+                    {
+                        dia = 4;
+                        cz = 1;
+                        dx = uartCableDia/2 + dia/2 + cz + 0.8;
+                        doubleX() rotate([90,0,0]) torus2a(radius=dia/2, translation=ctrsX);
+
+                        doubleX() translate([ctrsX,0,-dia/2-cz]) cylinder(d2=10, d1=0, h=5);
                     }
                 }
             }
@@ -115,6 +133,7 @@ module clip(d=0)
 {
 	//tc([-200, -400-d, -10], 400);
     // tcu([mountingHoleCtrsX/2+d, -200, -200], 400);
+    // tcu([-200, uartStrainReliefCtrY-400, -200], 400);
 }
 
 if(developmentRender)
