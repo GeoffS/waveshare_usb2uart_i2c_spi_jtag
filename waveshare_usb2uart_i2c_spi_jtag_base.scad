@@ -3,6 +3,7 @@ include <../OpenSCAD_Lib/chamferedCylinders.scad>
 include <../OpenSCAD_Lib/torus.scad>
 
 layerThickness = 0.2;
+perimeterWidth = 0.4;
 
 m3ClearanceDia = 3.5;
 // m3HeadClearanceDia = 6;
@@ -76,7 +77,10 @@ module itemModule()
             {
                 difference() 
                 {
-                    ctrsX = uartCableDia/2 + uartStrainReliefCZ + 2;
+                    zipTieDia = 4;
+                    zipTieCZ = 1;
+                    ctrsX = uartCableDia/2 + zipTieDia/2 + zipTieCZ + 2*perimeterWidth; // + uartStrainReliefCZ + 2;
+
                     // Body:
                     hull() doubleX() 
                         translate([ctrsX, 0, 0]) 
@@ -92,12 +96,9 @@ module itemModule()
                     // Zip-Tie:
                     translate([0,0,uartStrainReliefZ])
                     {
-                        dia = 4;
-                        cz = 1;
-                        dx = uartCableDia/2 + dia/2 + cz + 0.8;
-                        doubleX() rotate([90,0,0]) torus2a(radius=dia/2, translation=ctrsX);
+                        doubleX() rotate([90,0,0]) torus2a(radius=zipTieDia/2, translation=ctrsX);
 
-                        doubleX() translate([ctrsX,0,-dia/2-cz]) cylinder(d2=10, d1=0, h=5);
+                        doubleX() translate([ctrsX, 0, -zipTieDia/2-zipTieCZ]) cylinder(d2=10, d1=0, h=5);
                     }
                 }
             }
