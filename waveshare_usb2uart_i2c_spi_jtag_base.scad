@@ -2,11 +2,11 @@ include <../OpenSCAD_Lib/MakeInclude.scad>
 
 layerThickness = 0.2;
 
-m3ClearanceDia = 3.4;
-m3HeadClearanceDia = 6;
-m3SocketHeadZ = 3;
-m3SquareNutDia = 7.9; // $fn=4
-m3HexNutDia = 6.3; // $fn=6
+m3ClearanceDia = 3.5;
+// m3HeadClearanceDia = 6;
+// m3SocketHeadZ = 3;
+// m3SquareNutDia = 7.9; // $fn=4
+m3HexNutDia = 6.4; // $fn=6
 m3NutZ = 2.4; // both square and hex
 
 moduleBaseX = 86;
@@ -21,23 +21,25 @@ mountingHoleCtrsX = 72.2 + 3.6;
 mountingHoleCtrsY = 36.6 - 10;
 mountingHoleDia = m3ClearanceDia;
 mountingNutRecessDia = m3HexNutDia;
-mouuntingNutRecessZ = m3NutZ + 0.3; // 0.3 of the screw past the bolt.
-mountingBoltLength = 10;
+mouuntingNutRecessZ = m3NutZ + 0.5; // 0.3 of the screw past the bolt.
+mountingBoltLength = 8;
+
+// mountingBoltHeadToNutLength = mountingBoltLength - mouuntingNutRecessZ;
 
 baseConnectorSideY = 25;
 baseUsbSideY = 10;
 
 baseX = moduleBaseX + 2*4;
 baseY = moduleBaseY + baseConnectorSideY + baseUsbSideY;
-baseZ = mountingBoltLength - mouuntingNutRecessZ - moduleBaseZ;
+baseZ = mountingBoltLength - moduleBaseZ + 0.7; // mountingBoltLength - mountingNutRecessTotalZ - moduleBaseZ;
 baseCornerDia = 8;
 
 echo(str("baseZ = ", baseZ));
 
 mountingHolesOffsetY = moduleBaseY/2 - baseY/2 + baseConnectorSideY;
 
-// 0.2mm extra in case the bolt is a little long
-mountingNutRecessTotalZ = mouuntingNutRecessZ + 0.2;
+// 0.5mm extra in case the bolt is a little long
+mountingNutRecessTotalZ = mouuntingNutRecessZ + 0.5;
 
 module itemModule()
 {
@@ -55,7 +57,7 @@ module itemModule()
                 // Hole:
                 tcy([0,0,-1], d=mountingHoleDia, h=20);
                 // Nut recess:
-                tcy([0,0,-10+mountingNutRecessTotalZ], d=mountingNutRecessDia, h=10, $fn=6);
+                rotate([0,0,30]) tcy([0,0,-10+mountingNutRecessTotalZ], d=mountingNutRecessDia, h=10, $fn=6);
             }
     }
     // Sacrificial layer:
