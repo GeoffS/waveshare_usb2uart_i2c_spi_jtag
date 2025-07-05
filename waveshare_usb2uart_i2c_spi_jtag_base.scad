@@ -14,6 +14,9 @@ moduleBaseX = 86;
 moduleBaseY = 48;
 moduleBaseZ = 2.4;
 moduleBaseCornerDia = 3.5;
+
+moduleBodyY = 72.4;
+
 moduleUartDupontConnCtrZ = 15.3;
 moduleUartDupontConn1CtrX = 17.2;
 moduleUartDupontConn2Ctrx = 32.4;
@@ -65,11 +68,13 @@ module itemModule()
                         simpleChamferedCylinder(d=baseCornerDia, h=baseZ, cz=baseCZ);
 
             // UART cable strain relief:
-            translate([-baseX/2 + moduleUartDupontConnectorsCtrX, -baseY/2 + uartStrainReliefDia/2 + baseCZ, 0])
+            translate([-moduleBodyY/2 + moduleUartDupontConnectorsCtrX, -baseY/2 + uartStrainReliefDia/2 + baseCZ, 0])
             {
                 difference() 
                 {
-                    hull() uartStrainReliefXform() simpleChamferedCylinder(d=uartStrainReliefDia, h=uartStrainReliefZ, cz=uartStrainReliefCZ);
+                    hull() doubleX() 
+                        translate([uartCableDia/2 + uartStrainReliefCZ, 0, 0]) 
+                            simpleChamferedCylinder(d=uartStrainReliefDia, h=uartStrainReliefZ, cz=uartStrainReliefCZ);
 
                     translate([0,0,uartStrainReliefZ]) rotate([-90,0,0]) 
                     {
@@ -95,8 +100,7 @@ module itemModule()
 
 module uartStrainReliefXform()
 {
-    doubleX() 
-        translate([(uartStrainReliefDia + uartCableDia)/2, 0, 0]) 
+     
             children();
 }
 
