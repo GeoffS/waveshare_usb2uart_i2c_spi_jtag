@@ -1,6 +1,9 @@
 include <../OpenSCAD_Lib/MakeInclude.scad>
 
 moduleBaseZ = 2.4;
+moduleDubontConnCtrZ = 15.3;
+moduleDubontConn1CtrX = 17.2;
+moduleDubontConn2Ctrx = 32.4;
 
 baseConnectorSideY = 25;
 baseUsbSideY = 10;
