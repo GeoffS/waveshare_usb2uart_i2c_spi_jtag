@@ -9,10 +9,10 @@ m3ClearanceDia = 3.5;
 // m3HeadClearanceDia = 6;
 // m3SocketHeadZ = 3;
 // m3SquareNutDia = 7.9; // $fn=4
-m3HexNutDia = 6.4; // $fn=6
+m3HexNutDia = 6.55; // $fn=6
 m3NutZ = 2.4; // both square and hex
 
-moduleBaseX = 86;
+moduleBaseX = 88.5;
 moduleBaseY = 48;
 moduleBaseZ = 2.4;
 moduleBaseCornerDia = 3.5;
@@ -28,16 +28,18 @@ uartCableDia = 5;
 
 echo(str("moduleUartDupontConnectorsCtrX = ", moduleUartDupontConnectorsCtrX));
 
-mountingHoleCtrsX = 72.2 + 3.6;
+mountingHoleCtrsX = 78.8; //79.1; //72.2 + 3.6;
 mountingHoleCtrsY = 36.6 - 10;
 mountingHoleDia = m3ClearanceDia;
 mountingNutRecessDia = m3HexNutDia;
 mouuntingNutRecessZ = m3NutZ + 0.5; // 0.3 of the screw past the bolt.
 mountingBoltLength = 8;
 
+echo(str("mountingHoleCtrsX = ", mountingHoleCtrsX));
+
 // mountingBoltHeadToNutLength = mountingBoltLength - mouuntingNutRecessZ;
 
-baseConnectorSideY = 35;
+baseConnectorSideY = 40;
 baseUsbSideY = 10;
 
 baseX = moduleBaseX + 2*4;
@@ -46,6 +48,7 @@ baseZ = mountingBoltLength - moduleBaseZ + 0.7; // mountingBoltLength - mounting
 baseCornerDia = 20;
 baseCZ = 2;
 
+echo(str("baseX = ", baseX));
 echo(str("baseZ = ", baseZ));
 
 mountingHolesOffsetY = moduleBaseY/2 - baseY/2 + baseConnectorSideY;
