@@ -39,7 +39,7 @@ echo(str("mountingHoleCtrsX = ", mountingHoleCtrsX));
 
 // mountingBoltHeadToNutLength = mountingBoltLength - mouuntingNutRecessZ;
 
-baseConnectorSideY = 40;
+baseConnectorSideY = 37;
 baseUsbSideY = 10;
 
 baseX = moduleBaseX + 2*4;
@@ -56,12 +56,12 @@ mountingHolesOffsetY = moduleBaseY/2 - baseY/2 + baseConnectorSideY;
 // 0.5mm extra in case the bolt is a little long
 mountingNutRecessTotalZ = mouuntingNutRecessZ + 0.5;
 
-uartStrainReliefDia = 15;
+uartStrainReliefDia = 20;
 uartStrainReliefZ = baseZ + moduleUartDupontConnCtrZ;
 uartStrainReliefCZ = 2;
 
-uartStrainReliefCtrX = -moduleBodyY/2 + moduleUartDupontConnectorsCtrX;
-uartStrainReliefCtrY = -baseY/2 + uartStrainReliefDia/2 + baseCZ;
+uartStrainReliefCtrX = moduleBodyY/2 - 1; // + moduleUartDupontConnectorsCtrX;
+uartStrainReliefCtrY = -baseY/2 + 19; //uartStrainReliefDia/2 + baseCZ;
 
 module itemModule()
 {
@@ -76,7 +76,7 @@ module itemModule()
                         simpleChamferedCylinder(d=baseCornerDia, h=baseZ, cz=baseCZ);
 
             // UART cable strain relief:
-            translate([uartStrainReliefCtrX, uartStrainReliefCtrY, 0])
+            translate([uartStrainReliefCtrX, uartStrainReliefCtrY, 0]) rotate([0,0,90])
             {
                 difference() 
                 {
