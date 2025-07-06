@@ -82,7 +82,7 @@ module itemModule()
                 {
                     zipTieDia = 4;
                     zipTieCZ = 1;
-                    ctrsX = uartCableDia/2 + zipTieDia/2 + zipTieCZ + 2*perimeterWidth; // + uartStrainReliefCZ + 2;
+                    ctrsX = uartCableDia/2 + zipTieDia/2 + zipTieCZ + 0 + 2*perimeterWidth; // + uartStrainReliefCZ + 2;
 
                     // Body:
                     hull() doubleX() 
@@ -92,7 +92,11 @@ module itemModule()
                     // Cable cutout:
                     translate([0,0,uartStrainReliefZ]) rotate([-90,0,0]) 
                     {
-                        tcy([0,0,-20], d=uartCableDia, h=40);
+                        // Cable slot:
+                        tcy([0,-0.4,-20], d=uartCableDia, h=40);
+                        //Longitudinal chamfer:
+                        doubleX() tcy([1.8, -1.2, -20], d=uartCableDia, h=40, $fn=4);
+                        // End chamfers:
                         doubleZ() translate([0,0,uartStrainReliefDia/2-uartCableDia/2-uartStrainReliefCZ]) cylinder(d2=10, d1=0, h=5);
                     }
 
@@ -103,6 +107,9 @@ module itemModule()
 
                         doubleX() translate([ctrsX, 0, -zipTieDia/2-zipTieCZ]) cylinder(d2=10, d1=0, h=5);
                     }
+
+                    // Chamfer on cable cutout:
+
                 }
             }
         }
